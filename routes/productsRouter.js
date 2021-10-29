@@ -1,34 +1,16 @@
 const express = require('express');
-const faker = require("faker");
+
+const ProductsService = require('./../services/productsService')
+
 // Iniciamos un router, que sería como un sub-app para poder modularizar nuestra app
 const router = express.Router();
+// Creamos una instancia del servicio que creamos
+const service = new ProductsService();
 
 // Los get heredan el principio del endpoint desde routerApi
 // a tráves del uso de app
 router.get('/', (req, res) => {
-  // Creamos un array de productos, que vamos a utilizar abajo
-  const products = [];
-  // Creamos una variable, que capture algún ?query llamado size
-  const { size } = req.query;
-  // En limit, ponemos que su valor sea equivalente al query de size
-  // y en caso de no tener ningún query, su valor por defecto será 10.
-  const limit = size || 10;
-
-  // Esto, para hacer un loop.
-  // Que haga una iteración por el número de veces que tengamos en limit
-  for (let index = 0; index <= limit; index++) {
-    // En cada iteración vamos a insertar un elemento nuevo en el array
-    // Especificamente un producto en este caso
-    products.push({
-      // Con datos aleatorios generados por un paquete llamado faker
-      name: faker.commerce.productName(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl(),
-    })
-    // Este loop tiene como motivo, llenar el array de products
-    // con el número de productos que mandemos en el query.
-  }
-
+  const products = service.find();
   // Y finalmente mandamos como respuesta, nuestro array
   res.json(products);
 });
@@ -44,16 +26,14 @@ router.get('/:id', (req, res) => {
   // de nuestro get, con los dos puntos ':'
   // recogemos esto, con cualquier nombre que le asignemos
   const { id } = req.params
+  const product = service.findOne(id);
+
   if ( id === '999' ) {
     res.status(404).json({
       message: "Not found"
     })
   } else {
-    res.status(200).json({
-    id,
-    name: 'Product 2',
-    price: 2000
-  })}
+    res.status(200).json(product)}
 });
 
 // router.get('/categories/:categoryId/products/:productId', (req, res) => {
