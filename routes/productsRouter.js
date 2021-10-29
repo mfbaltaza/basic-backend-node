@@ -44,11 +44,16 @@ router.get('/:id', (req, res) => {
   // de nuestro get, con los dos puntos ':'
   // recogemos esto, con cualquier nombre que le asignemos
   const { id } = req.params
-  res.json({
+  if ( id === '999' ) {
+    res.status(404).json({
+      message: "Not found"
+    })
+  } else {
+    res.status(200).json({
     id,
     name: 'Product 2',
     price: 2000
-  });
+  })}
 });
 
 // router.get('/categories/:categoryId/products/:productId', (req, res) => {
@@ -67,7 +72,7 @@ router.post('/', (req, res) => {
   // Agarramos el request, todo lo que venga ahí y lo metemos dentro de esta variable
   const body = req.body;
   // Para retornar un JSON con la data que se encuentra dentro del body.
-  res.json({
+  res.status(201).json({
     message: 'created',
     data: body
   })
