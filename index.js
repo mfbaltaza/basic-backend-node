@@ -1,6 +1,9 @@
 const express = require('express');
 // Importamos el routerApi index, que está dentro de routes
 const routerApi = require('./routes')
+
+const { logErrors, erorrHandler } = require('./middlewares/errorHandler')
+
 const app = express();
 const port = 3000;
 
@@ -34,3 +37,8 @@ app.listen(port, () => {
 // El orden de ejecución de la función importa, si usas middlewares
 // como el de la línea 7
 routerApi(app);
+
+// Estos middlewares los tenemos que utilizar después de la función de routerApi
+// Y el orden de los middlewares importa.
+app.use(logErrors);
+app.use(erorrHandler);
