@@ -28,7 +28,20 @@ class ProductsService {
     }
   }
 
-  create() {}
+  // Reciberemos como argumento data JSON para crear nuestro producto...
+  create(data) {
+    // Creamos la variable para un producto nuevo
+    // En dónde nos toca a nosotros generarle un id
+    const newProduct = {
+      id: faker.datatype.uuid(),
+      // Y posteriormente hacemos spread de la data que nos proporcione el usuario
+      ...data
+    }
+    // Metemos el producto nuevo en nuestro array
+    this.products.push(newProduct);
+    // Y retornamos nuestros datos del producto individual
+    return newProduct
+  }
 
   find() {
     return this.products
@@ -38,9 +51,33 @@ class ProductsService {
     return this.products.find(item => item.id === id)
   }
 
-  update() {}
+  update(id, changes) {
+    // Tenemos que encontrar el index de nuestro producto
+    const index = this.products.findIndex(item => item.id === id)
+    // Si no encuentra su indice, el resultado probablemente sea -1
+    // Así que en ese caso, implementamos una comprobación de errores
+    if (index === -1) {
+      throw new Error('Product not found');
+    }
+    const product = this.products[index];
+    this.products[index] = {
+      ...product,
+      ...changes
+    };
+    return this.products[index]
+  }
 
-  delete() {}
+  delete(id) {
+    // Tenemos que encontrar el index de nuestro producto
+    const index = this.products.findIndex(item => item.id === id)
+    // Si no encuentra su indice, el resultado probablemente sea -1
+    // Así que en ese caso, implementamos una comprobación de errores
+    if (index === -1) {
+      throw new Error('Product not found');
+    }
+    this.products.splice(index, 1);
+    return { message: 'deleted', id };
+  }
 
 }
 

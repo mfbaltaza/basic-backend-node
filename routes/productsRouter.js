@@ -51,44 +51,36 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   // Agarramos el request, todo lo que venga ahí y lo metemos dentro de esta variable
   const body = req.body;
-  // Para retornar un JSON con la data que se encuentra dentro del body.
-  res.status(201).json({
-    message: 'created',
-    data: body
-  })
+  // Creamos una variable que va a mandar nuestro body al servicio
+  const newProduct = service.create(body)
+  // Por lo que tendremos como respuesta nuestros datos del nuevo producto
+  // En caso de que todo haya sido ejecutado de forma correcto
+  res.status(201).json(newProduct)
 })
 
 router.patch('/:id', (req, res) => {
   // Agarramos el request, todo lo que venga ahí y lo metemos dentro de esta variable
   const body = req.body;
   const { id } = req.params
+  const updatedProduct = service.update(id, body);
   // Para retornar un JSON con la data que se encuentra dentro del body.
-  res.json({
-    message: 'created',
-    data: body,
-    id
-  })
+  res.json(updatedProduct);
 })
 
 router.put('/:id', (req, res) => {
   // Agarramos el request, todo lo que venga ahí y lo metemos dentro de esta variable
   const body = req.body;
   const { id } = req.params
+  const updatedProduct = service.update(id, body);
   // Para retornar un JSON con la data que se encuentra dentro del body.
-  res.json({
-    message: 'created',
-    data: body,
-    id
-  })
+  res.json(updatedProduct);
 })
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params
+  const deletedProduct = service.delete(id)
   // Para retornar un JSON con la data que se encuentra dentro del body.
-  res.json({
-    message: 'deleted',
-    id
-  })
+  res.json(deletedProduct)
   // Retornamos este sin body, porque no nos interesa ver esa información
   // solo saber que elemento eliminamos
 })
